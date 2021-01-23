@@ -1,0 +1,8 @@
+{
+  "type": "record",
+  "name": "turnstyle.value",
+  "fields": [
+    {"name": "status", "value": "string"},
+    {"name": "temperature", "value": "string"}
+  ]
+}
