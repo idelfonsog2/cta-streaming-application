@@ -2,15 +2,16 @@
 import logging
 
 import confluent_kafka
-from confluent_kafka import Consumer
-from confluent_kafka.avro import AvroConsumer
+from confluent_kafka import Consumer, OFFSET_BEGINNING
+from confluent_kafka.avro import AvroConsumer, CachedSchemaRegistry
 from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
 
 
 logger = logging.getLogger(__name__)
 
-
+BROKER_URL = "http://localhost:9092"
+SCHEMA_REGISTRY_URL = "http://localhost:8081"
 class KafkaConsumer:
     """Defines the base kafka consumer class"""
 
@@ -30,49 +31,30 @@ class KafkaConsumer:
         self.consume_timeout = consume_timeout
         self.offset_earliest = offset_earliest
 
-        #
-        #
-        # TODO: Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!
-        #
-        #
         self.broker_properties = {
-                #
-                # TODO
-                #
+                "boostrap.server": BROKER_URL, 
+                "group.id": self.topic_name_pattern,
+                "allow.auto.create.topics": False,
+                "auto.create.topics.enable": False
         }
 
-        # TODO: Create the Consumer, using the appropriate type.
         if is_avro is True:
-            self.broker_properties["schema.registry.url"] = "http://localhost:8081"
-            #self.consumer = AvroConsumer(...)
+            self.broker_properties["schema.registry.url"] = SCHEMA_REGISTRY_URL
+            self.consumer = AvroConsumer(self.broker_properties)
         else:
-            #self.consumer = Consumer(...)
-            pass
+            self.broker_properties["auto.offset.reset"] = "earliest" if self.offset_earliest else "beginning",
+            self.consumer = Consumer(self.broker_properties)
 
-        #
-        #
-        # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
-        # how the `on_assign` callback should be invoked.
-        #
-        #
-        # self.consumer.subscribe( TODO )
+        self.consumer.subscribe([f"^{self.topic_name_pattern}"], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
-        # TODO: If the topic is configured to use `offset_earliest` set the partition offset to
-        # the beginning or earliest
-        logger.info("on_assign is incomplete - skipping")
         for partition in partitions:
-            pass
-            #
-            #
-            # TODO
-            #
-            #
+            if self.offset_earliest == True:
+                partition.offset = OFFSET_BEGINNING
 
         logger.info("partitions assigned for %s", self.topic_name_pattern)
-        consumer.assign(partitions)
+        self.consumer.assign(partitions)
 
     async def consume(self):
         """Asynchronously consumes data from kafka topic"""
@@ -84,16 +66,12 @@ class KafkaConsumer:
 
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
-        #
-        #
-        # TODO: Poll Kafka for messages. Make sure to handle any errors or exceptions.
-        # Additionally, make sure you return 1 when a message is processed, and 0 when no message
-        # is retrieved.
-        #
-        #
-        logger.info("_consume is incomplete - skipping")
+        message = self.consumer.poll(1.0)
+        
+        if message.value() is not None:
+            return 1
+        
         return 0
-
 
     def close(self):
         """Cleans up any open kafka consumers"""

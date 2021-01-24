@@ -49,8 +49,8 @@ def configure_connector():
     try:
         resp.raise_for_status()
         logging.debug("connector created successfully")
-    except expression as identifier:
-        
+    except:
+        logger.info(f"Failed to send data to Kafka Connect {json.dumps(resp.json(), indent=2)}")
 
 
 if __name__ == "__main__":

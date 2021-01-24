@@ -9,28 +9,24 @@ import topic_check
 
 logger = logging.getLogger(__name__)
 
-
 KSQL_URL = "http://localhost:8088"
-
-#
-# TODO: Complete the following KSQL statements.
-# TODO: For the first statement, create a `turnstile` table from your turnstile topic.
-#       Make sure to use 'avro' datatype!
-# TODO: For the second statment, create a `turnstile_summary` table by selecting from the
-#       `turnstile` table and grouping on station_id.
-#       Make sure to cast the COUNT of station id to `count`
-#       Make sure to set the value format to JSON
 
 KSQL_STATEMENT = """
 CREATE TABLE turnstile (
-    ???
+    station_id int,
+    station_name varchar,
+    line varchar
 ) WITH (
-    ???
+    KAFKA_TOPIC='com.my_cta_server.turnstile',
+    VALUE_FORMAT='AVRO',
+    KEY='station_id'
 );
 
 CREATE TABLE turnstile_summary
-WITH (???) AS
-    ???
+WITH (VALUE_FORMAT='JSON') AS
+SELECT station_id, COUNT(station_id) as count
+FROM turnstile
+GROUP BY station_id;
 """
 
 
@@ -47,13 +43,18 @@ def execute_statement():
         data=json.dumps(
             {
                 "ksql": KSQL_STATEMENT,
-                "streamsProperties": {"ksql.streams.auto.offset.reset": "earliest"},
+                "streamsProperties": {
+                    "ksql.streams.auto.offset.reset": "earliest"},
             }
         ),
     )
 
-    # Ensure that a 2XX status code was returned
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()    
+    except:
+        logger.info(f"Failed to send data to KSQL: {KSQL_URL} {json.dumps(resp.json(), indent=2)}")
+
+    
 
 
 if __name__ == "__main__":
