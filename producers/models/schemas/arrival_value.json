@@ -1,5 +1,6 @@
 {
   "type": "record",
+  "namespace": "com.my_cta_server",
   "name": "arrival.value",
   "fields": [
     {"name": "station_id", "type": "int"},

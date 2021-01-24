@@ -29,7 +29,7 @@ class Weather(Producer):
 
     def __init__(self, month):
         super().__init__(
-            TOPIC_NAME,
+            "com.my_cta_server.weather",
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=1,
@@ -88,10 +88,6 @@ class Weather(Producer):
         )
         try:
             resp.raise_for_status()
-            logger.debug(
-                "sent weather data to kafka, temp: %s, status: %s",
-                self.temp,
-                self.status.name,
-                )
+            logger.debug("sent weather data to kafka, temp: %s, status: %s",self.temp,self.status.name,)
         except:
             logger.info(f"Failed to send data to REST Proxy {json.dumps(resp.json(), indent=2)}")

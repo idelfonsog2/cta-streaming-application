@@ -1,6 +1,7 @@
 {
   "type": "record",
-  "name": "turnstyle.value",
+  "namespace": "com.my_cta_server",
+  "name": "weather.value",
   "fields": [
     {"name": "status", "type": "string"},
     {"name": "temperature", "type": "string"}

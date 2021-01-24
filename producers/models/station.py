@@ -9,7 +9,7 @@ from models.producer import Producer
 
 
 logger = logging.getLogger(__name__)
-TOPIC_NAME = "com.my_cta_server.station"
+TOPIC_NAME = "com.my_cta_server.station.arrival"
 
 class Station(Producer):
     """Defines a single station"""
@@ -56,7 +56,7 @@ class Station(Producer):
                     "train_id": train.train_id,
                     "direction": direction,
                     "line": self.color.name,
-                    "train_status": train.status,
+                    "train_status": str(train.status),
                     "prev_station_id": prev_station_id,
                     "prev_direction": prev_direction,
                 }

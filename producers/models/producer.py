@@ -9,8 +9,7 @@ from confluent_kafka.avro import AvroProducer, CachedSchemaRegistryClient
 
 logger = logging.getLogger(__name__)
 
-KAFKA_BROKER_URL = "localhost:9092"
-SCHEMA_REGISTRY_URL = "localhost:8081"
+KAFKA_BROKER_URL = "http://localhost:9092"
 
 class Producer:
     """Defines and provides common functionality amongst Producers"""
@@ -37,7 +36,7 @@ class Producer:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
 
-        schema_registry = CachedSchemaRegistry(SCHEMA_REGISTRY_URL)
+        schema_registry = CachedSchemaRegistryClient("http://localhost:8081")
 
         self.producer = AvroProducer(
             self.broker_properties,

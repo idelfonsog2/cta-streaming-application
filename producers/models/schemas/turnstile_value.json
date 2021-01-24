@@ -1,6 +1,7 @@
 {
   "type": "record",
-  "name": "turnstyle.value",
+  "namespace": "com.my_cta_server",
+  "name": "turnstile.value",
   "fields": [
     {"name": "station_id", "type": "int"},
     {"name": "station_name", "type": "string"},
