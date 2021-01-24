@@ -67,7 +67,7 @@ class KafkaConsumer:
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
         message = self.consumer.poll(1.0)
-        
+
         if message.value() is not None:
             return 1
         
@@ -75,8 +75,4 @@ class KafkaConsumer:
 
     def close(self):
         """Cleans up any open kafka consumers"""
-        #
-        #
-        # TODO: Cleanup the kafka consumer
-        #
-        #
+        self.consumer.close()
