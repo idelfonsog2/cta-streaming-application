@@ -54,8 +54,5 @@ def execute_statement():
     except:
         logger.info(f"Failed to send data to KSQL: {KSQL_URL} {json.dumps(resp.json(), indent=2)}")
 
-    
-
-
 if __name__ == "__main__":
     execute_statement()
