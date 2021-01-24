@@ -2,7 +2,7 @@
   "type": "record",
   "name": "turnstyle.value",
   "fields": [
-    {"name": "status", "value": "string"},
-    {"name": "temperature", "value": "string"}
+    {"name": "status", "type": "string"},
+    {"name": "temperature", "type": "string"}
   ]
 }

@@ -2,8 +2,8 @@
   "type": "record",
   "name": "turnstyle.value",
   "fields": [
-    {"name": "station_id", "value": "int"},
-    {"name": "station_name", "value": "string"},
-    {"name": "line", "value": "string"}
+    {"name": "station_id", "type": "int"},
+    {"name": "station_name", "type": "string"},
+    {"name": "line", "type": "string"}
   ]
 }

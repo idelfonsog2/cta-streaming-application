@@ -29,7 +29,7 @@ class Weather(Producer):
 
     def __init__(self, month):
         super().__init__(
-            "com.my_cta_server.weather",
+            TOPIC_NAME,
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=1,
