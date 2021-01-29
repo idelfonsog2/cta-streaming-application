@@ -5,6 +5,13 @@
   "fields": [
     {"name": "station_id", "type": "int"},
     {"name": "station_name", "type": "string"},
-    {"name": "line", "type": "string"}
+    {
+      "name": "line", 
+      "type": {
+        "name": "colors",
+        "type": "enum",
+        "symbols": ["blue", "red", "green"]
+      }
+    }
   ]
 }
